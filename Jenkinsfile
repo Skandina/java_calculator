@@ -3,17 +3,26 @@ pipeline {
     stages {
         stage('Build') { 
             steps {
-               echo 'build' 
+               sh './gradlew build' 
             }
         }
         stage('Test') { 
+	    when {
+               anyOf { 
+                    branch 'develop';
+		    branch 'main'
+               }
+            }
             steps {
-                echo 'test' 
+                sh './gradlew test' 
             }
         }
         stage('Deploy') { 
+	    when {
+		 branch 'main'
+	    }
             steps {
-               echo 'postbuild'
+                echo "Deploy"
             }
         }
     }
